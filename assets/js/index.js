@@ -7,6 +7,38 @@ Search bar functionality:
 - The city name the user input will be used to get the team ID from the balldontlie API
 - Use the Get Teams endpoint, query string of search=city name
 
+*/
+function getBallStats() {
+    
+    let queryURL = "https://www.balldontlie.io/api/v1/teams";
+    fetch(queryURL)
+        .then(function(response) {
+            if (!response.ok) {
+                throw response.json();
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            let teamsObject = data['data'];
+            console.log(teamsObject);
+            for (let i = 0; i < teamsObject.length; i++) {
+                if (teamsObject[i].city === "Toronto") {
+                    // Get the team ID from the object
+                    let teamID = teamsObject[i].id;
+                    console.log(teamID);
+                    // Break out of the loop
+                    break;
+                }
+            }
+
+            // Once the city is retrieved, run the API call to get the season stats
+            // getSeasonStats(teamID);
+        })
+}
+
+getBallStats();
+/*
+
 Season stats section:
 - The season stats section will be populated with the stats from the current season
 - The stats will be pulled from the balldontlie API, specifically use the Get All Games endpoint
