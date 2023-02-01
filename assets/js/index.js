@@ -31,6 +31,7 @@ Calendar Button
 
 let searchButton = document.querySelector("#search-button");
 let upcomingGamesElement = $("#upcoming-games");
+let selectedTeam = $(".dropdown-menu li");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
@@ -142,4 +143,18 @@ function getTeamEvents(teamName) {
                 }
         })
 }
-getTeamEvents("toronto-raptors");
+
+
+
+
+selectedTeam.click(function(event) {
+    // Get the team name from the selected element
+    let teamName = event.target.text;
+
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replace(" ", "-");
+    console.log(teamSGFormat);
+
+    // Call the getTeamEvents function for the selected team
+    getTeamEvents(teamSGFormat);
+})
