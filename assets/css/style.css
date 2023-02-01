@@ -1,0 +1,30 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
+
+.season-card {
+    display: flex;
+    background: rgb(16, 116, 152);
+    margin: 0.5em;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.season-card img {
+    width: 70px;
+    margin: 5px;
+}
+
+.playerName {
+    font-size: 20px;
+}
+
+.iconPlayer {
+    align-items: center;
+    justify-content: center;
+}
