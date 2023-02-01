@@ -35,9 +35,9 @@ let selectedTeam = $(".dropdown-menu li");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
-
-function getBallStats() {
-    
+// Gets a team ID from the balldontlie teams endpoint
+// Used to get a list of games with the team ID from the games endpoint
+function getTeamID(teamName) {
     let queryURL = "https://www.balldontlie.io/api/v1/teams";
     fetch(queryURL)
         .then(function(response) {
@@ -48,17 +48,12 @@ function getBallStats() {
         })
         .then(function(data) {
             let teamsObject = data['data'];
-            console.log(teamsObject);
             for (let i = 0; i < teamsObject.length; i++) {
-                if (teamsObject[i].city === "Toronto") {
+                if (teamsObject[i].full_name === teamName) {
                     // Get the team ID from the object
-                    let teamID = teamsObject[i].id;
-                    console.log(teamID);
-
-                    // Store the teamID somewhere (In data attribute or use it as a parameter in the getSeasonStats function)
-
-                    // Break out of the loop
-                    break;
+                    let bdlTeamID = teamsObject[i].id;
+                    getGameStats(bdlTeamID);
+                    return;
                 }
             }
 
@@ -67,6 +62,30 @@ function getBallStats() {
         })
 }
 
+// Function to get the recent game stats from the game endpoint of balldontlie API.
+function getGameStats(teamID) {
+    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-01-31&per_page=100";
+    fetch(queryURL)
+        .then(function(response) {
+            if (!response.ok) {
+                throw response.json();
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            let gamesObject = data['data'];
+            
+            // Function to sort the dates of the game
+            function custom_sort(a, b) {
+                return new Date(a.date).getTime() - new Date(b.date).getTime();
+            }            
+            // Sort the games by date
+            gamesObject.sort(custom_sort);
+            console.log(gamesObject)
+        })
+}
+
+// Test of Seat Geek API -- gets the team information.
 function authenticateCredentials() {
     let team = "toronto-raptors"
     
@@ -88,14 +107,11 @@ function authenticateCredentials() {
         })
   }
 // authenticateCredentials();
-// getBallStats();
 
-
-
-
-function getTeamEvents(teamName) {
-
-    let queryURL = "https://api.seatgeek.com/2/events/?performers.slug=" + teamName + "&per_page=30&client_id=" + clientID + "&client_secret=" + clientAppSecret;
+// Get the upcoming games from the seat geek API and display them in a table.
+function getUpcomingGames(teamName) {
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-");
+    let queryURL = "https://api.seatgeek.com/2/events/?performers.slug=" + teamSGFormat + "&per_page=30&client_id=" + clientID + "&client_secret=" + clientAppSecret;
     fetch(queryURL)
         .then(function(response) {
             if (!response.ok) {
@@ -104,6 +120,7 @@ function getTeamEvents(teamName) {
             return response.json();
         })
         .then(function(data) {
+            upcomingGamesElement.empty();
             let nbaGames = data['events'];
 
             let table = $('<table>');
@@ -146,15 +163,15 @@ function getTeamEvents(teamName) {
 
 
 
-
 selectedTeam.click(function(event) {
-    // Get the team name from the selected element
+    // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text;
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
 
     // Convert the team name to the SeatGeek query sting format
-    let teamSGFormat = teamName.toLowerCase().replace(" ", "-");
-    console.log(teamSGFormat);
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-");
 
-    // Call the getTeamEvents function for the selected team
-    getTeamEvents(teamSGFormat);
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
 })
