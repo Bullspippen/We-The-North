@@ -29,11 +29,20 @@ Calendar Button
 - When the user clicks the calendar button, the user will be taken to the calendar page
 */
 
-let searchButton = document.querySelector("#search-button");
 let upcomingGamesElement = $("#upcoming-games");
 let selectedTeam = $(".dropdown-menu li");
+let playerStatsElement = $("#player-stats");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
+
+var players = {
+    "Luka Doncic": 132,
+    "Nikola Jokic": 246,
+    "Joel Embiid": 145,
+    "Giannis Antetokounmpo": 15,
+    "LeBron James": 237,
+}
+console.log (players.length);
 
 // Gets a team ID from the balldontlie teams endpoint
 // Used to get a list of games with the team ID from the games endpoint
@@ -62,6 +71,50 @@ function getTeamID(teamName) {
         })
 }
 
+function getPlayerID() {
+    queryURL = "https://www.balldontlie.io/api/v1/players?search=LeBron";
+
+    fetch(queryURL)
+        .then(function(response) {
+            if (!response.ok) {
+                throw response.json();
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+        })
+}   
+// getPlayerID();
+
+// Function to get the upcoming games from the seat geek API
+function getPlayerStats() {
+    indexPlayers = Object.keys(players);
+
+    for (var i=0; i < indexPlayers.length; i++) {
+        (function(i) {
+          // Define the query URL
+          let avgstatsQueryURL = "https://www.balldontlie.io/api/v1/season_averages?player_ids[]=" + players[indexPlayers[i]] +  "&per_page=100";
+      
+          fetch(avgstatsQueryURL)
+              .then(function(response) {
+                  if (!response.ok) {
+                      throw response.json();
+                  }
+                  return response.json();
+              })
+              .then(function(data) {
+                console.log(data)
+                  let playerStats = data['data'];
+                  let cardHeader = $('<h5>').text(indexPlayers[i]);
+                  let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
+                  playerStatsElement.append(cardHeader, cardBody);
+              });
+        })(i); 
+    } 
+}
+getPlayerStats();
+
 // Function to get the recent game stats from the game endpoint of balldontlie API.
 function getGameStats(teamID) {
     let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-01-31&per_page=100";
@@ -78,9 +131,10 @@ function getGameStats(teamID) {
             // Function to sort the dates of the game
             function custom_sort(a, b) {
                 return new Date(a.date).getTime() - new Date(b.date).getTime();
-            }            
+            }    
+
             // Sort the games by date
-            gamesObject.sort(custom_sort);
+            gamesObject.sort( custom_sort ); //returns the array sorted by date in ascendingorder (oldest --> newest game)
             console.log(gamesObject)
         })
 }
@@ -166,6 +220,7 @@ function getUpcomingGames(teamName) {
 selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text;
+
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
 
