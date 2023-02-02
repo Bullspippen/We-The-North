@@ -29,6 +29,8 @@ h6 {
     justify-content: center;
 }
 
+
+/* Style the table */
 table {
     border-collapse: collapse;
     width: 100%;
@@ -57,7 +59,7 @@ table {
     }
 
     
-
+/* Add a background image to the page */
     body {
         background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
         background-size: cover;
