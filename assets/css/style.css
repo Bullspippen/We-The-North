@@ -28,7 +28,14 @@ h6 {
     align-items: center;
     justify-content: center;
 }
+/* 
+.recent-stats {
+    height: 
+} */
 
+#recent-stats img {
+    width: 1px;
+}
 
 /* Style the table */
 table {
