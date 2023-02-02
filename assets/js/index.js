@@ -36,6 +36,8 @@ let recentGamesElement = $("#recent-stats");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
+// const playersAll = require("players.js");
+
 var players = {
     "Luka Doncic": 132,
     "Nikola Jokic": 246,
@@ -116,6 +118,23 @@ function getPlayerStats() {
 }
 // getPlayerStats();
 
+//Test function with new API - API-NBA
+function getPlayerStatsTest() {
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': 'a026606b55mshd03190ee9e5dbe3p1aeb50jsnd1105ce5c128',
+            'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
+        }
+    };
+    
+    fetch('https://api-nba-v1.p.rapidapi.com/players?team=1&season=2021', options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+}
+// getPlayerStatsTest();
+
 // Function to get the recent game stats from the game endpoint of balldontlie API.
 function getGameStats(teamID) {
     let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-01-31&per_page=100";
@@ -137,8 +156,7 @@ function getGameStats(teamID) {
             // Sort the games by date
             gamesObject.sort( custom_sort ); //returns the array sorted by date in ascendingorder (oldest --> newest game)
 
-            console.log(gamesObject);
-            
+            // Create the table            
             let table = $('<table>');
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
@@ -148,6 +166,8 @@ function getGameStats(teamID) {
             let cellTeam2 = $('<td>').text("Games");
             let cellLocation = $('<td>').text("Venue");
 
+            // Reset the table and append it to the page
+            recentGamesElement.empty();
             recentGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
