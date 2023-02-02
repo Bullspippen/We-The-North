@@ -303,14 +303,14 @@ selectedTeam.click(function(event) {
 })
 
 // Working pieces for Local Save of previously selected teams
-viewHistoryBtnEl.addEventListener("click", function () {
-    let saveTeam = teamPlaceholderElement.value
-    let teamHistoryLocalSave = { teamname: saveTeam };
+// viewHistoryBtnEl.addEventListener("click", function () {
+//     let saveTeam = teamPlaceholderElement.value
+//     let teamHistoryLocalSave = { teamname: saveTeam };
 
-    // Retrieves the locally stored array of scores and names. Uses JSON parsing to convert text format into a JS array. || Means if there's nothing stored, then [] will make it blank
-    teamHistory = JSON.parse(localStorage.getItem("leaderbd")) || [];
+//     // Retrieves the locally stored array of scores and names. Uses JSON parsing to convert text format into a JS array. || Means if there's nothing stored, then [] will make it blank
+//     teamHistory = JSON.parse(localStorage.getItem("teamname")) || [];
     
-    // Adds current score to the highScores array
-    highScores.push(teamHistoryLocal);
-    localStorage.setItem("leaderbd", JSON.stringify(highScores));
-});
+//     // Adds current score to the highScores array
+//     teamHistArray.push(teamHistoryLocal);
+//     localStorage.setItem("teamname", JSON.stringify(teamHistArray));
+// });
