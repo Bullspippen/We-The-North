@@ -90,6 +90,7 @@ function getGameStats(teamID, teamName) {
         .then(function(data) {
             // Get the games from the JSON object
             let gamesObject = data['data'];
+            console.log(gamesObject);
             
             // Function to sort the dates of the game
             function custom_sort(a, b) {
@@ -104,51 +105,82 @@ function getGameStats(teamID, teamName) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellDate = $('<td>').text("Date");
-            let cellTeam1 = $('<td>').text(teamName);
-            let cellTeam2Name = $('<td>').text("Opposing Team");
-            let cellTeam2Score = $('<td>').text("Opp. Team Score");
-            let cellLocation = $('<td>').text("Venue");
+            let cellDate = $('<th>').text("Date");
+            let cellWinner =$('<th>').text("Winner");
+            let cellTeam1 = $('<th>').text(teamName);
+            let cellTeam2Name = $('<th>').text("Opposing Team");
+            let cellTeam2Score = $('<th>').text("Opp. Team Score");
+            let cellLocation = $('<th>').text("Venue");
 
             // Reset the table and append it to the page
             recentGamesElement.empty();
             recentGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
-            rowHead.append(cellDate, cellTeam1, cellTeam2Name, cellTeam2Score, cellLocation);
+            rowHead.append(cellDate, cellWinner, cellTeam1, cellTeam2Name, cellTeam2Score, cellLocation);
             table.append( tableBody );
 
             // Loop through the games and add them to the table
-            for (let game = 0; game < gamesObject.length; game++) {
+            for (let game = 0; game < 10; game++) {
+                // Create the table cells and append them to the table row
                 let gameDate = gamesObject[game].date;
                 let formattedGameDate = dayjs(gameDate).format("ddd, MMM D");
                 let location = gamesObject[game]['home_team'].city;
+                let rowDataDate = $('<td>').text(formattedGameDate);
+                let rowDataLocation = $('<td>').text(location);
 
                 // Create the table row and append it to the table body
                 let rowData = $('<tr>').attr("class", "row" + game);
                 tableBody.append(rowData);
 
-                // Create the table cells and append them to the table row
-                let rowDataDate = $('<td>').text(formattedGameDate);
-                let rowDataLocation = $('<td>').text(location);
+                // Check for if the selected team is the home/away team and if they won.
 
-                // Check if the selected team is the home team or the away team. Assign the team names and scores accordingly.
+                // If the selected team is the home team
                 if (gamesObject[game]['home_team'].full_name == teamName) {
+                    // Define the team names and scores
                     let team1Score = gamesObject[game].home_team_score;
                     let team2Name = gamesObject[game]['visitor_team'].full_name;
                     let team2Score = gamesObject[game].visitor_team_score;
-                    let rowDataTeam1 = $('<td>').text(team1Score);
-                    let rowDataTeam2Name = $('<td>').text(team2Name);
-                    let rowDataTeam2Score = $('<td>').text(team2Score);
-                    rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+
+                    // Check if the selected team (home team) won or lost the game. Update the winner column accordingly
+                    if (team1Score > team2Score) {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "win");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = teamName;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
+                    else {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "loss");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = team2Name;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
                 } else {
+                    // The selected team is the away team. Define the team names and scores
                     let team1Score = gamesObject[game].visitor_team_score;
                     let team2Name = gamesObject[game]['home_team'].full_name;
                     let team2Score = gamesObject[game].home_team_score;
-                    let rowDataTeam1 = $('<td>').text(team1Score);
-                    let rowDataTeam2Name = $('<td>').text(team2Name);
-                    let rowDataTeam2Score = $('<td>').text(team2Score);
-                    rowData.append(rowDataDate, rowDataTeam1,  rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+
+                    // Check if the selected team (away team) won or lost the game. Update the winner column accordingly
+                    if (team1Score > team2Score) {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "win");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = teamName;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    } else {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "loss");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = team2Name;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
                 }
             }
         })
@@ -176,10 +208,10 @@ function getUpcomingGames(teamName) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellGameDateTime = $('<td>').text("Date");
-            let cellTitle = $('<td>').text("Games");
-            let cellVenueLocation = $('<td>').text("Venue");
-            let cellBuyTickets = $('<td>').text("Tickets");
+            let cellGameDateTime = $('<th>').text("Date");
+            let cellTitle = $('<th>').text("Games");
+            let cellVenueLocation = $('<th>').text("Venue");
+            let cellBuyTickets = $('<th>').text("Tickets");
             
             // Append the table to the page
             upcomingGamesElement.append( table );
