@@ -132,7 +132,7 @@ function getPlayerStats() {
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
                   playerStatsElement.append(cardHeader, cardBody);
 
-                // Dynamically Updating Player Info
+                // Dynamically Updating Player Info for Season Avg Card
                 seasonPlNameEl.text(indexPlayers[i]);
                 seasonPPGEl.text(playerStats[0].pts);
                 seasonAPGEl.text(playerStats[0].ast);
