@@ -187,8 +187,8 @@ function getGameStats(teamID) {
                 tableBody.append(rowData);
 
                 let rowDataDate = $('<td>').text(formattedGameDate);
-                let rowDataTeam1 = $('<td>').text(team1 + "Score: " + team1Score);
-                let rowDataTeam2 = $('<td>').text(team2 + "Score: " + team2Score);
+                let rowDataTeam1 = $('<td>').text(team1 + " Score: " + team1Score);
+                let rowDataTeam2 = $('<td>').text(team2 + " Score: " + team2Score);
                 let rowDataLocation = $('<td>').text("Played in: " + location);
 
                 rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2, rowDataLocation);
