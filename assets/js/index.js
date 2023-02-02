@@ -105,12 +105,12 @@ function getGameStats(teamID, teamName) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellDate = $('<td>').text("Date");
-            let cellWinner =$('<td>').text("Winner");
-            let cellTeam1 = $('<td>').text(teamName);
-            let cellTeam2Name = $('<td>').text("Opposing Team");
-            let cellTeam2Score = $('<td>').text("Opp. Team Score");
-            let cellLocation = $('<td>').text("Venue");
+            let cellDate = $('<th>').text("Date");
+            let cellWinner =$('<th>').text("Winner");
+            let cellTeam1 = $('<th>').text(teamName);
+            let cellTeam2Name = $('<th>').text("Opposing Team");
+            let cellTeam2Score = $('<th>').text("Opp. Team Score");
+            let cellLocation = $('<th>').text("Venue");
 
             // Reset the table and append it to the page
             recentGamesElement.empty();
@@ -208,10 +208,10 @@ function getUpcomingGames(teamName) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellGameDateTime = $('<td>').text("Date");
-            let cellTitle = $('<td>').text("Games");
-            let cellVenueLocation = $('<td>').text("Venue");
-            let cellBuyTickets = $('<td>').text("Tickets");
+            let cellGameDateTime = $('<th>').text("Date");
+            let cellTitle = $('<th>').text("Games");
+            let cellVenueLocation = $('<th>').text("Venue");
+            let cellBuyTickets = $('<th>').text("Tickets");
             
             // Append the table to the page
             upcomingGamesElement.append( table );
