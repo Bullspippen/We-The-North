@@ -66,11 +66,20 @@ function getPlayerStats() {
                   return response.json();
               })
               .then(function(data) {
-                  let playerStats = data['data'];
-                  let cardHeader = $('<h5>').text(indexPlayers[i]);
-                  let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
-                  let image = $("<img>").attr("src", images[indeximages[i]])
-                  playerStatsElement.append(cardHeader, image, cardBody);
+                let playerStats = data['data'];
+                let cardContainer = $('<div>').addClass("card col-sm-3");
+                let cardHeader = $('<h5>').text(indexPlayers[i]);
+                let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
+                let image = $("<img>").attr("src", images[indeximages[i]])
+                  
+                // Append the cards to the container
+                playerStatsElement.append(cardContainer);
+
+                // Append the card elements to the card
+                cardContainer.append(cardHeader, cardBody);
+
+                // Append the images into the paragraph
+                cardBody.append(image);
               });
         })(i); 
     } 
@@ -78,8 +87,17 @@ function getPlayerStats() {
 
 // Function to get the recent game stats and display them in a table.
 function getGameStats(teamID, teamName) {
+    // Get the dates to use in balldontlie API query. Yesterday and 30 days ago.
+    var today = dayjs();
+    let yesterday = dayjs().subtract(1, 'day');
+    var thirtyDaysAgo = dayjs().subtract(30, 'day');
+    let yesterdayFormatted = yesterday.format('YYYY-MM-DD');    
+    var thirtyDaysAgoFormatted = thirtyDaysAgo.format('YYYY-MM-DD');
+
+
     // Get the games from the balldontlie games endpoint
-    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-02-01&per_page=100";
+    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=" + thirtyDaysAgoFormatted + "&end_date=" + yesterdayFormatted+ "&per_page=100";
+    
     fetch(queryURL)
         .then(function(response) {
             if (!response.ok) {
@@ -90,15 +108,27 @@ function getGameStats(teamID, teamName) {
         .then(function(data) {
             // Get the games from the JSON object
             let gamesObject = data['data'];
-            console.log(gamesObject);
-            
-            // Function to sort the dates of the game
+
+            // Get the abbreviation of the selected team. Used in table heading
+            if (teamName === gamesObject[0].home_team.full_name) {
+                shortName = gamesObject[0].home_team.abbreviation;
+            } else {
+                shortName = gamesObject[0].visitor_team.abbreviation;
+            }
+           
+            // Sort the games by date - desc. Create a custom function to sort the dates of the game
             function custom_sort(a, b) {
                 return new Date(b.date).getTime() - new Date(a.date).getTime();
             }    
+            gamesObject.sort( custom_sort ); //returns the array sorted by date in decending order (newest to oldest)
+            
+            // Reset the recent games element
+            recentGamesElement.empty();
 
-            // Sort the games by date
-            gamesObject.sort( custom_sort ); //returns the array sorted by date in ascendingorder (oldest --> newest game)
+            // Create and append a header to the table
+            let tableHeader = $('<h3>').text( teamName + " last 10 games");
+            recentGamesElement.append(tableHeader);
+
 
             // Create the table            
             let table = $('<table>');
@@ -107,13 +137,12 @@ function getGameStats(teamID, teamName) {
             let rowHead = $('<tr>');
             let cellDate = $('<th>').text("Date");
             let cellWinner =$('<th>').text("Winner");
-            let cellTeam1 = $('<th>').text(teamName);
+            let cellTeam1 = $('<th>').text(shortName + " Final Score");
             let cellTeam2Name = $('<th>').text("Opposing Team");
             let cellTeam2Score = $('<th>').text("Opp. Team Score");
             let cellLocation = $('<th>').text("Venue");
 
             // Reset the table and append it to the page
-            recentGamesElement.empty();
             recentGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
@@ -261,13 +290,13 @@ init();
 
 selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
-    let teamName = event.target.text;
+    let teamName = event.target.text; // Toronto Raptors 
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
 
     // Convert the team name to the SeatGeek query sting format
-    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-");
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // toronto-raptors
 
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);

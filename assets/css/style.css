@@ -1,32 +1,38 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Apply styling to global elements */
+body {
+    background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-.season-card {
-    display: flex;
-    background: rgb(16, 116, 152);
-    margin: 0.5em;
-    border-radius: 20px;
-    width: 100%;
+/* Style the side bar buttons */
+.custom-button{
+    background-color: rgba(60, 59, 56, 0.919);
+    color: goldenrod;
+    font-weight: bolder;
+    border: 2px solid rgba(60, 59, 56, 1);
+    border-radius: 5px;
+    margin-bottom: 1%;
 }
-
-.season-card img {
-    width: 70px;
-    margin: 5px;
+.custom-button:hover{
+    background-color: rgba(60, 59, 56, 0.1);
+    color: goldenrod;
+    font-weight: bolder;
+    border: 2px solid rgba(60, 59, 56, 1);
+    border-radius: 5px;
+    margin-bottom: 1%;
 }
-
-.playerName {
-    font-size: 20px;
-}
-
-.iconPlayer {
-    align-items: center;
-    justify-content: center;
+/* Style the player cards */
+.card {
+    background-color: rgba(60, 59, 56, 0);
+    color: rgba(60, 59, 56, 0.919);
+    border: 0 ;
+    padding: 0.5%;
 }
 /* 
 .recent-stats {
@@ -37,38 +43,39 @@ h6 {
     width: 1px;
 }
 
-/* Style the table */
+/* Style the tables */
 table {
     border-collapse: collapse;
     width: 100%;
+    color: goldenrod;
     }
-    
-    th, td {
-    border: 2px solid rgba(60, 59, 56, 0.919);
-    text-align: center;
-    padding: 8px;
-    }
-    
-    th {
+th{
     background-color: white;
-    }
-    
-    tr:nth-child(even) {
-    background-color: rgba(221, 221, 221, 0.7);
-    }
-    
-    tr:hover {
-    background-color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .highlighted {
-    background-color: rgba(255, 215, 0, 0.7);
-    }
+    font-weight: bolder;
+}
+th, td {
+border: 2px solid rgba(60, 59, 56, 0.919);
+text-align: center;
+padding: 8px;
+}
+td {
+    font-size: 0.85em;
+}
+tr:nth-child(even) {
+background-color: rgba(221, 221, 221, 0.9);
+}
+tr:nth-child(odd) {
+background-color: rgba(50, 49, 46, 0.85);
+}
+tr:hover {
+background-color: rgba(255, 255, 255, 1);
+}
 
-    
-/* Add a background image to the page */
-    body {
-        background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
-        background-size: cover;
-        background-repeat: no-repeat;
-      }
+/* Style the title of the recent games table */
+#recent-stats h3 {
+    color: goldenrod;
+    font-weight: bolder;
+    font-size: 1.5em;
+    margin-bottom: 0.5%;
+    text-align: center;
+}
