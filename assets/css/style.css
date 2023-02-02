@@ -20,6 +20,10 @@ h6 {
     margin: 5px;
 }
 
+.season-stats {
+    display: block;
+}
+
 .playerName {
     font-size: 20px;
 }

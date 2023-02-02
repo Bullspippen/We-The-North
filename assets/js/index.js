@@ -35,6 +35,11 @@ let playerStatsElement = $("#player-stats");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
+// Show/Hide Button Element for Upcoming Games Calendar + Element calls for the two cards to be 'hidden'
+var upcomingGamesBtnEl = document.querySelector("#viewUpcoming");
+var seasonStatsCardEl = document.querySelector("#season-card");
+var recentStatsCardEl = $("#recent-stats").css('display', 'block');
+
 // Season Avg Card Elements
 var seasonPlNameEl = $("#playerName");
 var seasonPPGEl = $("#ppg");
@@ -43,6 +48,12 @@ var seasonRPGEl = $("#rpg");
 var season3PerEl = $("#tpperc");
 var seasonBlocksEl = $("#bpg");
 var seasonStealsEl = $("#stpg");
+var seasonOrebEl = $("#oreb");
+var seasonDrebEl = $("#dreb");
+var seasonTPmEl = $("#tpm");
+var seasonTPaEl = $("#tpa");
+
+
 
 var seasonIconEl = $("#iconPicture");
 
@@ -121,19 +132,32 @@ function getPlayerStats() {
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
                   playerStatsElement.append(cardHeader, cardBody);
 
-                  // Dynamically Updating Player Info
+                // Dynamically Updating Player Info
                 seasonPlNameEl.text(indexPlayers[i]);
                 seasonPPGEl.text(playerStats[0].pts);
                 seasonAPGEl.text(playerStats[0].ast);
                 seasonRPGEl.text(playerStats[0].reb);
-                season3PerEl.text(playerStats[0].fg3_pct + "%");
+                season3PerEl.text((playerStats[0].fg3_pct) + "%");
                 seasonBlocksEl.text(playerStats[0].blk);
                 seasonStealsEl.text(playerStats[0].stl);
+                seasonOrebEl.text(playerStats[0].oreb);
+                seasonDrebEl.text(playerStats[0].dreb);
+                seasonTPmEl.text(playerStats[0].fg3m);
+                seasonTPaEl.text(playerStats[0].fg3a);
               });
         })(i); 
     } 
 }
 getPlayerStats();
+
+// Hides the element so the next page can show up on a clear screen
+function hide(element) {
+}
+
+// Shows the next page with whatever is in the brackets of show('page-name')
+function show(element) {
+    element.style.display = "block";
+}
 
 // Function to get the recent game stats from the game endpoint of balldontlie API.
 function getGameStats(teamID) {
@@ -250,3 +274,17 @@ selectedTeam.click(function(event) {
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);
 })
+
+
+// View Upcoming Games / Calendar Page Button
+
+var showhomeCheck = true;
+upcomingGamesBtnEl.addEventListener("click", function () {
+    // if (showhomeCheck === true) {
+        seasonStatsCardEl.style.display = "none";
+        showhomeCheck = false;
+    // }
+    // else {
+    //     seasonStatsCardEl.style.display = "flex";
+    // }
+});
