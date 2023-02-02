@@ -32,11 +32,19 @@ Calendar Button
 let upcomingGamesElement = $("#upcoming-games");
 let selectedTeam = $(".dropdown-menu li");
 let playerStatsElement = $("#player-stats");
-let recentGamesElement = $("#recent-stats");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
-// const playersAll = require("players.js");
+// Season Avg Card Elements
+var seasonPlNameEl = $("#playerName");
+var seasonPPGEl = $("#ppg");
+var seasonAPGEl = $("#apg");
+var seasonRPGEl = $("#rpg");
+var season3PerEl = $("#tpperc");
+var seasonBlocksEl = $("#bpg");
+var seasonStealsEl = $("#stpg");
+
+var seasonIconEl = $("#iconPicture");
 
 var players = {
     "Luka Doncic": 132,
@@ -112,28 +120,20 @@ function getPlayerStats() {
                   let cardHeader = $('<h5>').text(indexPlayers[i]);
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
                   playerStatsElement.append(cardHeader, cardBody);
+
+                  // Dynamically Updating Player Info
+                seasonPlNameEl.text(indexPlayers[i]);
+                seasonPPGEl.text(playerStats[0].pts);
+                seasonAPGEl.text(playerStats[0].ast);
+                seasonRPGEl.text(playerStats[0].reb);
+                season3PerEl.text(playerStats[0].fg3_pct + "%");
+                seasonBlocksEl.text(playerStats[0].blk);
+                seasonStealsEl.text(playerStats[0].stl);
               });
         })(i); 
     } 
 }
-// getPlayerStats();
-
-//Test function with new API - API-NBA
-function getPlayerStatsTest() {
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': 'a026606b55mshd03190ee9e5dbe3p1aeb50jsnd1105ce5c128',
-            'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
-        }
-    };
-    
-    fetch('https://api-nba-v1.p.rapidapi.com/players?team=1&season=2021', options)
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-}
-// getPlayerStatsTest();
+getPlayerStats();
 
 // Function to get the recent game stats from the game endpoint of balldontlie API.
 function getGameStats(teamID) {
@@ -155,44 +155,7 @@ function getGameStats(teamID) {
 
             // Sort the games by date
             gamesObject.sort( custom_sort ); //returns the array sorted by date in ascendingorder (oldest --> newest game)
-
-            // Create the table            
-            let table = $('<table>');
-            let tableBody = $('<tbody>');
-            let tableHead = $('<thead>');
-            let rowHead = $('<tr>');
-            let cellDate = $('<td>').text("Tickets");
-            let cellTeam1 = $('<td>').text("Date");
-            let cellTeam2 = $('<td>').text("Games");
-            let cellLocation = $('<td>').text("Venue");
-
-            // Reset the table and append it to the page
-            recentGamesElement.empty();
-            recentGamesElement.append( table );
-            table.append(tableHead);
-            tableHead.append(rowHead);
-            rowHead.append(cellDate, cellTeam1, cellTeam2, cellLocation);
-            table.append( tableBody );
-
-            for (let game = 0; game < gamesObject.length; game++) {
-                let gameDate = gamesObject[game].date;
-                let formattedGameDate = dayjs(gameDate).format("ddd, MMM D");
-                let team1 = gamesObject[game]['home_team'].full_name;
-                let team2 = gamesObject[game]['visitor_team'].full_name;
-                let team1Score = gamesObject[game].home_team_score;
-                let team2Score = gamesObject[game].visitor_team_score;
-                let location = gamesObject[game]['home_team'].city;
-
-                let rowData = $('<tr>').attr("class", "row" + game);
-                tableBody.append(rowData);
-
-                let rowDataDate = $('<td>').text(formattedGameDate);
-                let rowDataTeam1 = $('<td>').text(team1 + "Score: " + team1Score);
-                let rowDataTeam2 = $('<td>').text(team2 + "Score: " + team2Score);
-                let rowDataLocation = $('<td>').text("Played in: " + location);
-
-                rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2, rowDataLocation);
-            }
+            console.log(gamesObject)
         })
 }
 
