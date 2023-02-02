@@ -15,6 +15,14 @@ var players = {
     "LeBron James": 237,
 }
 
+var images = {
+    "Luka Doncic": "https://www.basketball-reference.com/req/202106291/images/players/doncilu01.jpg",
+    "Nikola Jokic": "https://www.basketball-reference.com/req/202106291/images/players/jokicni01.jpg",
+    "Joel Embiid": "https://www.basketball-reference.com/req/202106291/images/players/embiijo01.jpg",
+    "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
+    "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
+};
+
 // Gets a team ID from the balldontlie teams endpoint
 // The team ID is used to get a list of games with the team ID from the games endpoint.
 function getTeamID(teamName) {
@@ -43,6 +51,7 @@ function getTeamID(teamName) {
 // Function to get the top player stats displayed in the aside element (sidebar)
 function getPlayerStats() {
     indexPlayers = Object.keys(players);
+    indeximages = Object.keys(images)
 
     for (var i=0; i < indexPlayers.length; i++) {
         (function(i) {
@@ -60,7 +69,8 @@ function getPlayerStats() {
                   let playerStats = data['data'];
                   let cardHeader = $('<h5>').text(indexPlayers[i]);
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
-                  playerStatsElement.append(cardHeader, cardBody);
+                  let image = $("<img>").attr("src", images[indeximages[i]])
+                  playerStatsElement.append(cardHeader, image, cardBody);
               });
         })(i); 
     } 
