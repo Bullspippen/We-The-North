@@ -28,3 +28,38 @@ h6 {
     align-items: center;
     justify-content: center;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    }
+    
+    th, td {
+    border: 2px solid rgba(60, 59, 56, 0.919);
+    text-align: center;
+    padding: 8px;
+    }
+    
+    th {
+    background-color: white;
+    }
+    
+    tr:nth-child(even) {
+    background-color: rgba(221, 221, 221, 0.7);
+    }
+    
+    tr:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .highlighted {
+    background-color: rgba(255, 215, 0, 0.7);
+    }
+
+    
+
+    body {
+        background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
