@@ -1,50 +1,11 @@
-/* Landing page notes 
-Search bar functionality:
-- When the user enters a city name, the city name is saved to local storage
-- The event listener will be a click on the search button
-- When the user enters a city name, the city name is used to get the stats from the balldontlie API
-- The city name the user input will be used to get the team ID from the balldontlie API
-- Use the Get Teams endpoint, query string of search=city name
-
-Season stats section:
-- The season stats section will be populated with the stats from the current season
-- The stats will be pulled from the balldontlie API, specifically use the Get All Games endpoint
-- The URL request should include the seasons=2023 and teams/<ID> query strings
-- The stats will be pulled from the games array to populate the season stats section
-- Include the following stats: games played, wins, losses, win percentage, points per game, rebounds per game, assists per game, steals per game, blocks per game, turnovers per game, field goal percentage, three point percentage, free throw percentage
-
-Most recent games section:
-- The most recent games section should be populated with the stats from the games played in the previous 7 days
-- The stats will be pulled from the balldontlie API, specifically use the Get All Games endpoint
-- The URL request should include the teams/<ID>, start_date and end_date query strings (dates will depend on current day)  
-- The stats will be pulled from the games array to populate the most recent games section
-- Include the following stats: date, opponent, result, points, rebounds, assists, steals, blocks
-
-MVP section:
-- The MVP section will be populated with the stats from the 3 player with the most points in the games played last week
-- The stats can be retrieved from the same JSON object returned in the most recent games section
-- The stats will be pulled from the games array to populate the MVP section
-
-Calendar Button
-- When the user clicks the calendar button, the user will be taken to the calendar page
-*/
-
+// Define the global variables.
 let upcomingGamesElement = $("#upcoming-games");
 let selectedTeam = $(".dropdown-menu li");
 let playerStatsElement = $("#player-stats");
 let recentGamesElement = $("#recent-stats");
+let selectButton = $("#dropdownMenuButton1");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
-
-$(document).ready(function(){
-    let selectedOption = $('.dropdown-menu li').filter(function() {
-      return $(this).text() === 'Toronto Raptors';
-    });
-  
-    $(".dropdown-toggle").text(selectedOption.text());
-  });
-
-// const playersAll = require("players.js");
 
 var players = {
     "Luka Doncic": 132,
@@ -53,11 +14,11 @@ var players = {
     "Giannis Antetokounmpo": 15,
     "LeBron James": 237,
 }
-console.log (players.length);
 
 // Gets a team ID from the balldontlie teams endpoint
-// Used to get a list of games with the team ID from the games endpoint
+// The team ID is used to get a list of games with the team ID from the games endpoint.
 function getTeamID(teamName) {
+    selectButton.text(teamName);
     let queryURL = "https://www.balldontlie.io/api/v1/teams";
     fetch(queryURL)
         .then(function(response) {
@@ -76,29 +37,10 @@ function getTeamID(teamName) {
                     return;
                 }
             }
-
-            // Once the city is retrieved, run the API call to get the season stats
-            // getSeasonStats(teamID);
         })
 }
 
-function getPlayerID() {
-    queryURL = "https://www.balldontlie.io/api/v1/players?search=LeBron";
-
-    fetch(queryURL)
-        .then(function(response) {
-            if (!response.ok) {
-                throw response.json();
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data);
-        })
-}   
-// getPlayerID();
-
-// Function to get the upcoming games from the seat geek API
+// Function to get the top player stats displayed in the aside element (sidebar)
 function getPlayerStats() {
     indexPlayers = Object.keys(players);
 
@@ -115,7 +57,6 @@ function getPlayerStats() {
                   return response.json();
               })
               .then(function(data) {
-                console.log(data)
                   let playerStats = data['data'];
                   let cardHeader = $('<h5>').text(indexPlayers[i]);
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
@@ -124,28 +65,11 @@ function getPlayerStats() {
         })(i); 
     } 
 }
-// getPlayerStats();
 
-//Test function with new API - API-NBA
-function getPlayerStatsTest() {
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': 'a026606b55mshd03190ee9e5dbe3p1aeb50jsnd1105ce5c128',
-            'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com'
-        }
-    };
-    
-    fetch('https://api-nba-v1.p.rapidapi.com/players?team=1&season=2021', options)
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-}
-// getPlayerStatsTest();
-
-// Function to get the recent game stats from the game endpoint of balldontlie API.
+// Function to get the recent game stats and display them in a table.
 function getGameStats(teamID) {
-    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-01-31&per_page=100";
+    // Get the games from the balldontlie games endpoint
+    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-02-01&per_page=100";
     fetch(queryURL)
         .then(function(response) {
             if (!response.ok) {
@@ -154,6 +78,7 @@ function getGameStats(teamID) {
             return response.json();
         })
         .then(function(data) {
+            // Get the games from the JSON object
             let gamesObject = data['data'];
             
             // Function to sort the dates of the game
@@ -169,9 +94,9 @@ function getGameStats(teamID) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellDate = $('<td>').text("Tickets");
-            let cellTeam1 = $('<td>').text("Date");
-            let cellTeam2 = $('<td>').text("Games");
+            let cellDate = $('<td>').text("Date");
+            let cellTeam1 = $('<td>').text("Team 1");
+            let cellTeam2 = $('<td>').text("Team 2");
             let cellLocation = $('<td>').text("Venue");
 
             // Reset the table and append it to the page
@@ -182,6 +107,7 @@ function getGameStats(teamID) {
             rowHead.append(cellDate, cellTeam1, cellTeam2, cellLocation);
             table.append( tableBody );
 
+            // Loop through the games and add them to the table
             for (let game = 0; game < gamesObject.length; game++) {
                 let gameDate = gamesObject[game].date;
                 let formattedGameDate = dayjs(gameDate).format("ddd, MMM D");
@@ -204,31 +130,9 @@ function getGameStats(teamID) {
         })
 }
 
-// Test of Seat Geek API -- gets the team information.
-function authenticateCredentials() {
-    let team = "toronto-raptors"
-    
-    let queryURL = "https://api.seatgeek.com/2/performers/?slug=" + team + "&client_id=" + clientID + "&client_secret=" + clientAppSecret;
-    fetch(queryURL) 
-        .then(function(response) {
-            if (!response.ok) {
-                throw response.json();
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data);
-            // let teamID = data['performers'][0].id;
-            // console.log(teamID);
-
-            // Call the getTeamEvents function
-            getTeamEvents(team);
-        })
-  }
-// authenticateCredentials();
-
 // Get the upcoming games from the seat geek API and display them in a table.
 function getUpcomingGames(teamName) {
+    // Format the query string inputs and define the URL in the call
     let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-");
     let queryURL = "https://api.seatgeek.com/2/events/?performers.slug=" + teamSGFormat + "&per_page=30&client_id=" + clientID + "&client_secret=" + clientAppSecret;
     fetch(queryURL)
@@ -239,9 +143,11 @@ function getUpcomingGames(teamName) {
             return response.json();
         })
         .then(function(data) {
-            upcomingGamesElement.empty();
+            // Get the upcoming games from the JSON object
             let nbaGames = data['events'];
 
+            // Empty the table and create the table elements
+            upcomingGamesElement.empty();
             let table = $('<table>');
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
@@ -250,13 +156,15 @@ function getUpcomingGames(teamName) {
             let cellTitle = $('<td>').text("Games");
             let cellVenueLocation = $('<td>').text("Venue");
             let cellBuyTickets = $('<td>').text("Tickets");
-
+            
+            // Append the table to the page
             upcomingGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
             rowHead.append(cellGameDateTime, cellTitle, cellVenueLocation, cellBuyTickets);
             table.append( tableBody );
 
+            // Loop through the games and add them to the table
             for (let game = 0; game < nbaGames.length; game++) {
                 let gameDate = nbaGames[game].datetime_local;
                 let formattedGameDate = dayjs(gameDate).format("MMM D");
@@ -280,7 +188,20 @@ function getUpcomingGames(teamName) {
         })
 }
 
+function init() {
+    // Display the raptors as the default team
+    getPlayerStats();
 
+    // Enter the team ID for the Toronto Raptors to display there recent game stats
+    getGameStats(28);
+
+    // Call the getUpcomingGames function for the Toronto Raptors
+    getUpcomingGames("Toronto Raptors");
+
+    // Display the raptors as the default team
+    selectButton.text("Toronto Raptors");
+}
+init();
 
 selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
