@@ -15,6 +15,14 @@ var players = {
     "LeBron James": 237,
 }
 
+var images = {
+    "Luka Doncic": "https://www.basketball-reference.com/req/202106291/images/players/doncilu01.jpg",
+    "Nikola Jokic": "https://www.basketball-reference.com/req/202106291/images/players/jokicni01.jpg",
+    "Joel Embiid": "https://www.basketball-reference.com/req/202106291/images/players/embiijo01.jpg",
+    "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
+    "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
+};
+
 // Gets a team ID from the balldontlie teams endpoint
 // The team ID is used to get a list of games with the team ID from the games endpoint.
 function getTeamID(teamName) {
@@ -33,7 +41,7 @@ function getTeamID(teamName) {
                 if (teamsObject[i].full_name === teamName) {
                     // Get the team ID from the object
                     let bdlTeamID = teamsObject[i].id;
-                    getGameStats(bdlTeamID);
+                    getGameStats(bdlTeamID, teamName);
                     return;
                 }
             }
@@ -43,6 +51,7 @@ function getTeamID(teamName) {
 // Function to get the top player stats displayed in the aside element (sidebar)
 function getPlayerStats() {
     indexPlayers = Object.keys(players);
+    indeximages = Object.keys(images)
 
     for (var i=0; i < indexPlayers.length; i++) {
         (function(i) {
@@ -60,14 +69,15 @@ function getPlayerStats() {
                   let playerStats = data['data'];
                   let cardHeader = $('<h5>').text(indexPlayers[i]);
                   let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
-                  playerStatsElement.append(cardHeader, cardBody);
+                  let image = $("<img>").attr("src", images[indeximages[i]])
+                  playerStatsElement.append(cardHeader, image, cardBody);
               });
         })(i); 
     } 
 }
 
 // Function to get the recent game stats and display them in a table.
-function getGameStats(teamID) {
+function getGameStats(teamID, teamName) {
     // Get the games from the balldontlie games endpoint
     let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-02-01&per_page=100";
     fetch(queryURL)
@@ -83,7 +93,7 @@ function getGameStats(teamID) {
             
             // Function to sort the dates of the game
             function custom_sort(a, b) {
-                return new Date(a.date).getTime() - new Date(b.date).getTime();
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
             }    
 
             // Sort the games by date
@@ -95,8 +105,9 @@ function getGameStats(teamID) {
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
             let cellDate = $('<td>').text("Date");
-            let cellTeam1 = $('<td>').text("Team 1");
-            let cellTeam2 = $('<td>').text("Team 2");
+            let cellTeam1 = $('<td>').text(teamName);
+            let cellTeam2Name = $('<td>').text("Opposing Team");
+            let cellTeam2Score = $('<td>').text("Opp. Team Score");
             let cellLocation = $('<td>').text("Venue");
 
             // Reset the table and append it to the page
@@ -104,28 +115,41 @@ function getGameStats(teamID) {
             recentGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
-            rowHead.append(cellDate, cellTeam1, cellTeam2, cellLocation);
+            rowHead.append(cellDate, cellTeam1, cellTeam2Name, cellTeam2Score, cellLocation);
             table.append( tableBody );
 
             // Loop through the games and add them to the table
             for (let game = 0; game < gamesObject.length; game++) {
                 let gameDate = gamesObject[game].date;
                 let formattedGameDate = dayjs(gameDate).format("ddd, MMM D");
-                let team1 = gamesObject[game]['home_team'].full_name;
-                let team2 = gamesObject[game]['visitor_team'].full_name;
-                let team1Score = gamesObject[game].home_team_score;
-                let team2Score = gamesObject[game].visitor_team_score;
                 let location = gamesObject[game]['home_team'].city;
 
+                // Create the table row and append it to the table body
                 let rowData = $('<tr>').attr("class", "row" + game);
                 tableBody.append(rowData);
 
+                // Create the table cells and append them to the table row
                 let rowDataDate = $('<td>').text(formattedGameDate);
-                let rowDataTeam1 = $('<td>').text(team1 + " Score: " + team1Score);
-                let rowDataTeam2 = $('<td>').text(team2 + " Score: " + team2Score);
-                let rowDataLocation = $('<td>').text("Played in: " + location);
+                let rowDataLocation = $('<td>').text(location);
 
-                rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2, rowDataLocation);
+                // Check if the selected team is the home team or the away team. Assign the team names and scores accordingly.
+                if (gamesObject[game]['home_team'].full_name == teamName) {
+                    let team1Score = gamesObject[game].home_team_score;
+                    let team2Name = gamesObject[game]['visitor_team'].full_name;
+                    let team2Score = gamesObject[game].visitor_team_score;
+                    let rowDataTeam1 = $('<td>').text(team1Score);
+                    let rowDataTeam2Name = $('<td>').text(team2Name);
+                    let rowDataTeam2Score = $('<td>').text(team2Score);
+                    rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                } else {
+                    let team1Score = gamesObject[game].visitor_team_score;
+                    let team2Name = gamesObject[game]['home_team'].full_name;
+                    let team2Score = gamesObject[game].home_team_score;
+                    let rowDataTeam1 = $('<td>').text(team1Score);
+                    let rowDataTeam2Name = $('<td>').text(team2Name);
+                    let rowDataTeam2Score = $('<td>').text(team2Score);
+                    rowData.append(rowDataDate, rowDataTeam1,  rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                }
             }
         })
 }
@@ -193,7 +217,7 @@ function init() {
     getPlayerStats();
 
     // Enter the team ID for the Toronto Raptors to display there recent game stats
-    getGameStats(28);
+    getGameStats(28, "Toronto Raptors");
 
     // Call the getUpcomingGames function for the Toronto Raptors
     getUpcomingGames("Toronto Raptors");
