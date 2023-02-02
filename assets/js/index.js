@@ -36,6 +36,14 @@ let recentGamesElement = $("#recent-stats");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
+$(document).ready(function(){
+    let selectedOption = $('.dropdown-menu li').filter(function() {
+      return $(this).text() === 'Toronto Raptors';
+    });
+  
+    $(".dropdown-toggle").text(selectedOption.text());
+  });
+
 // const playersAll = require("players.js");
 
 var players = {
