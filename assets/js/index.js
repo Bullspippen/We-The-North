@@ -23,6 +23,7 @@ var images = {
     "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
 };
 
+
 // Gets a team ID from the balldontlie teams endpoint
 // The team ID is used to get a list of games with the team ID from the games endpoint.
 function getTeamID(teamName) {
