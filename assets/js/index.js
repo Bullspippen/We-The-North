@@ -7,20 +7,26 @@ let selectButton = $("#dropdownMenuButton1");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
 
+let teamHist0BtnElement = $("#prevTeam0");
+let teamHist1BtnElement = $("#prevTeam1");
+let teamHist2BtnElement = $("#prevTeam2");
+var teamHistoryArray = ["Toronto Raptors", "Los Angeles Lakers", "New York Knicks"];
+    
+
 var players = {
     "Luka Doncic": 132,
     "Nikola Jokic": 246,
     "Joel Embiid": 145,
-    "Giannis Antetokounmpo": 15,
-    "LeBron James": 237,
+    // "Giannis Antetokounmpo": 15,
+    // "LeBron James": 237,
 }
 
 var images = {
     "Luka Doncic": "https://www.basketball-reference.com/req/202106291/images/players/doncilu01.jpg",
     "Nikola Jokic": "https://www.basketball-reference.com/req/202106291/images/players/jokicni01.jpg",
     "Joel Embiid": "https://www.basketball-reference.com/req/202106291/images/players/embiijo01.jpg",
-    "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
-    "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
+    // "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
+    // "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
 };
 
 
@@ -67,20 +73,42 @@ function getPlayerStats() {
                   return response.json();
               })
               .then(function(data) {
-                  let playerStats = data['data'];
-                  let cardHeader = $('<h5>').text(indexPlayers[i]);
-                  let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
-                  let image = $("<img>").attr("src", images[indeximages[i]])
-                  playerStatsElement.append(cardHeader, image, cardBody);
+                let playerStats = data['data'];
+                let playerStatsTitle = $('<h3>').text("Top 3 Season Leaders");
+                let cardContainer = $('<div>').addClass("card col-lg-12 col-md-4 col-sm-4 col-xs-4");
+                let cardHeader = $('<h5>').text(indexPlayers[i]);
+                let cardBody = $('<p>').text("Points:\n " + playerStats[0].pts + "\nRebounds: \n" + playerStats[0].reb + "\nAssists: \n" + playerStats[0].ast);
+                let image = $("<img>").attr("src", images[indeximages[i]])
+                  
+                // Append the card container to the player stats element
+                playerStatsElement.append(cardContainer);
+
+                // Append the card elements to the card
+                cardContainer.append(cardHeader, cardBody);
+
+                // Append the images into the paragraph
+                cardBody.append(image);
               });
-        })(i); 
-    } 
+        })(i);
+    }
+    // Append the title of the card containers to the player stats element
+    let playerStatsTitle = $('<h3>').text("Top 3 Season Leaders");
+    playerStatsElement.append(playerStatsTitle); 
 }
 
 // Function to get the recent game stats and display them in a table.
 function getGameStats(teamID, teamName) {
+    // Get the dates to use in balldontlie API query. Yesterday and 30 days ago.
+    var today = dayjs();
+    let yesterday = dayjs().subtract(1, 'day');
+    var thirtyDaysAgo = dayjs().subtract(30, 'day');
+    let yesterdayFormatted = yesterday.format('YYYY-MM-DD');    
+    var thirtyDaysAgoFormatted = thirtyDaysAgo.format('YYYY-MM-DD');
+
+
     // Get the games from the balldontlie games endpoint
-    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=2023-01-01&end_date=2023-02-01&per_page=100";
+    let queryURL = "https://www.balldontlie.io/api/v1/games?team_ids[]=" + teamID + "&start_date=" + thirtyDaysAgoFormatted + "&end_date=" + yesterdayFormatted+ "&per_page=100";
+    
     fetch(queryURL)
         .then(function(response) {
             if (!response.ok) {
@@ -91,65 +119,108 @@ function getGameStats(teamID, teamName) {
         .then(function(data) {
             // Get the games from the JSON object
             let gamesObject = data['data'];
-            
-            // Function to sort the dates of the game
+
+            // Get the abbreviation of the selected team. Used in table heading
+            if (teamName === gamesObject[0].home_team.full_name) {
+                shortName = gamesObject[0].home_team.abbreviation;
+            } else {
+                shortName = gamesObject[0].visitor_team.abbreviation;
+            }
+           
+            // Sort the games by date - desc. Create a custom function to sort the dates of the game
             function custom_sort(a, b) {
                 return new Date(b.date).getTime() - new Date(a.date).getTime();
             }    
+            gamesObject.sort( custom_sort ); //returns the array sorted by date in decending order (newest to oldest)
+            
+            // Reset the recent games element
+            recentGamesElement.empty();
 
-            // Sort the games by date
-            gamesObject.sort( custom_sort ); //returns the array sorted by date in ascendingorder (oldest --> newest game)
+            // Create and append a header to the table
+            let tableHeader = $('<h3>').text( teamName + " Last 10 Games");
+            recentGamesElement.append(tableHeader);
+
 
             // Create the table            
             let table = $('<table>');
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellDate = $('<td>').text("Date");
-            let cellTeam1 = $('<td>').text(teamName);
-            let cellTeam2Name = $('<td>').text("Opposing Team");
-            let cellTeam2Score = $('<td>').text("Opp. Team Score");
-            let cellLocation = $('<td>').text("Venue");
+            let cellDate = $('<th>').text("Date");
+            let cellWinner =$('<th>').text("Winner");
+            let cellTeam1 = $('<th>').text(shortName + " Final Score");
+            let cellTeam2Name = $('<th>').text("Opposing Team");
+            let cellTeam2Score = $('<th>').text("Opp. Team Score");
+            let cellLocation = $('<th>').text("Venue");
 
             // Reset the table and append it to the page
-            recentGamesElement.empty();
             recentGamesElement.append( table );
             table.append(tableHead);
             tableHead.append(rowHead);
-            rowHead.append(cellDate, cellTeam1, cellTeam2Name, cellTeam2Score, cellLocation);
+            rowHead.append(cellDate, cellWinner, cellTeam1, cellTeam2Name, cellTeam2Score, cellLocation);
             table.append( tableBody );
 
             // Loop through the games and add them to the table
-            for (let game = 0; game < gamesObject.length; game++) {
+            for (let game = 0; game < 10; game++) {
+                // Create the table cells and append them to the table row
                 let gameDate = gamesObject[game].date;
                 let formattedGameDate = dayjs(gameDate).format("ddd, MMM D");
                 let location = gamesObject[game]['home_team'].city;
+                let rowDataDate = $('<td>').text(formattedGameDate);
+                let rowDataLocation = $('<td>').text(location);
 
                 // Create the table row and append it to the table body
                 let rowData = $('<tr>').attr("class", "row" + game);
                 tableBody.append(rowData);
 
-                // Create the table cells and append them to the table row
-                let rowDataDate = $('<td>').text(formattedGameDate);
-                let rowDataLocation = $('<td>').text(location);
+                // Check for if the selected team is the home/away team and if they won.
 
-                // Check if the selected team is the home team or the away team. Assign the team names and scores accordingly.
+                // If the selected team is the home team
                 if (gamesObject[game]['home_team'].full_name == teamName) {
+                    // Define the team names and scores
                     let team1Score = gamesObject[game].home_team_score;
                     let team2Name = gamesObject[game]['visitor_team'].full_name;
                     let team2Score = gamesObject[game].visitor_team_score;
-                    let rowDataTeam1 = $('<td>').text(team1Score);
-                    let rowDataTeam2Name = $('<td>').text(team2Name);
-                    let rowDataTeam2Score = $('<td>').text(team2Score);
-                    rowData.append(rowDataDate, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+
+                    // Check if the selected team (home team) won or lost the game. Update the winner column accordingly
+                    if (team1Score > team2Score) {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "win");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = teamName;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
+                    else {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "loss");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = team2Name;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
                 } else {
+                    // The selected team is the away team. Define the team names and scores
                     let team1Score = gamesObject[game].visitor_team_score;
                     let team2Name = gamesObject[game]['home_team'].full_name;
                     let team2Score = gamesObject[game].home_team_score;
-                    let rowDataTeam1 = $('<td>').text(team1Score);
-                    let rowDataTeam2Name = $('<td>').text(team2Name);
-                    let rowDataTeam2Score = $('<td>').text(team2Score);
-                    rowData.append(rowDataDate, rowDataTeam1,  rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+
+                    // Check if the selected team (away team) won or lost the game. Update the winner column accordingly
+                    if (team1Score > team2Score) {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "win");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = teamName;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    } else {
+                        let rowDataTeam1 = $('<td>').text(team1Score).attr("class", "loss");
+                        let rowDataTeam2Name = $('<td>').text(team2Name);
+                        let rowDataTeam2Score = $('<td>').text(team2Score);
+                        let winner = team2Name;
+                        let rowWinner = $('<td>').text(winner);
+                        rowData.append(rowDataDate, rowWinner, rowDataTeam1, rowDataTeam2Name, rowDataTeam2Score, rowDataLocation);
+                    }
                 }
             }
         })
@@ -177,10 +248,10 @@ function getUpcomingGames(teamName) {
             let tableBody = $('<tbody>');
             let tableHead = $('<thead>');
             let rowHead = $('<tr>');
-            let cellGameDateTime = $('<td>').text("Date");
-            let cellTitle = $('<td>').text("Games");
-            let cellVenueLocation = $('<td>').text("Venue");
-            let cellBuyTickets = $('<td>').text("Tickets");
+            let cellGameDateTime = $('<th>').text("Date");
+            let cellTitle = $('<th>').text("Games");
+            let cellVenueLocation = $('<th>').text("Venue");
+            let cellBuyTickets = $('<th>').text("Tickets");
             
             // Append the table to the page
             upcomingGamesElement.append( table );
@@ -213,7 +284,18 @@ function getUpcomingGames(teamName) {
         })
 }
 
+function retrieveLocalSavedTeams() {
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+}
+retrieveLocalSavedTeams();
+
 function init() {
+    // Retrieve the local storage data from the client-side storage
+    retrieveLocalSavedTeams();
+
     // Display the raptors as the default team
     getPlayerStats();
 
@@ -228,16 +310,78 @@ function init() {
 }
 init();
 
+// Retrieve the local storage data from the client-side storage
+function retrieveLocalSavedTeams() {
+
+    // Retrieve the local storage data from the client-side storage
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+}
+
+
 selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
-    let teamName = event.target.text;
+    let teamName = event.target.text; // Toronto Raptors 
+
+    // Team Viewing History builder for array
+    teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
+    teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
+    
+    localStorage.setItem("localSavedTeams", JSON.stringify(teamHistoryArray));
+    
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
 
     // Convert the team name to the SeatGeek query sting format
-    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-");
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // toronto-raptors
 
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+// Event listeners for Group of Buttons for Team History
+teamHist0BtnElement.click(function(event){
+    let teamName = teamHistoryArray[0]; // Retrieves the first team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist1BtnElement.click(function(event){
+    let teamName = teamHistoryArray[1]; // Retrieves the second team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist2BtnElement.click(function(event){
+    let teamName = teamHistoryArray[2]; // Retrieves the third team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);
 })

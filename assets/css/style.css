@@ -1,32 +1,63 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Apply styling to global elements */
+body {
+    background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: 100vh;
+    overflow: scroll;
+  }
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-.season-card {
-    display: flex;
-    background: rgb(16, 116, 152);
-    margin: 0.5em;
-    border-radius: 20px;
+/* Style the side bar buttons */
+.custom-button{
+    background-color: rgba(60, 59, 56, 0.919);
+    color: goldenrod;
+    font-weight: bolder;
+    border: 2px solid rgba(60, 59, 56, 1);
+    border-radius: 5px;
     width: 100%;
 }
-
-.season-card img {
-    width: 70px;
-    margin: 5px;
+.custom-button:hover{
+    background-color: rgba(60, 59, 56, 0.1);
+    color: goldenrod;
+    font-weight: bolder;
+    border: 2px solid rgba(60, 59, 56, 1);
+    border-radius: 5px;
+    margin-bottom: 1%;
 }
-
-.playerName {
-    font-size: 20px;
+/* Add spacing to the player stats container */
+#player-stats {
+    margin-top: 5%;
 }
-
-.iconPlayer {
-    align-items: center;
-    justify-content: center;
+#player-stats h3 {
+    color: goldenrod;
+    font-weight: bolder;
+    font-size: 1.5em;
+    margin-bottom: 5%;
+    text-align: center;
+}
+/* Style the player cards */
+.card {
+    background-color: rgba(60, 59, 56, 0);
+    border: 0 ;
+    padding: 0.5%;
+}
+.card h5 {
+    font-weight: bold;
+    display: inline-block;
+    float: left;
+    color: rgba(60, 59, 56, 0.919);
+}
+.card p {
+    display: flex;
+    font-size: .85em;
+    color: goldenrod;
+}
+.card p img {
+    margin-right: 10px;
+    width: 35%;
 }
 
 .card img {
@@ -34,40 +65,112 @@ h6 {
     height: 300px;
     object-fit: cover;
     border: 1px solid black;
+    }
+    
+#historyBtnGroup {
+    color: goldenrod;
+    margin: 5% 0 3% 0;
+    text-align: center;
+}
+#historyBtnGroup button {
+    margin-bottom: 1%;
+}
+#last-container{
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
-/* Style the table */
+/* Style the tables */
 table {
     border-collapse: collapse;
     width: 100%;
+    color: goldenrod;
     }
-    
-    th, td {
-    border: 2px solid rgba(60, 59, 56, 0.919);
-    text-align: center;
-    padding: 8px;
-    }
-    
-    th {
+th{
     background-color: white;
-    }
-    
-    tr:nth-child(even) {
-    background-color: rgba(221, 221, 221, 0.7);
-    }
-    
-    tr:hover {
-    background-color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .highlighted {
-    background-color: rgba(255, 215, 0, 0.7);
+    color:  rgba(60, 59, 56, 0.919);
+    font-weight: bolder;
+    font-size: 1.3em;
+}
+th, td {
+border: 2px solid rgba(60, 59, 56, 0.919);
+text-align: center;
+padding: 8px;
+}
+td {
+    font-size: 1em;
+}
+tr:nth-child(even) {
+background-color: rgba(221, 221, 221, 0.9);
+}
+tr:nth-child(odd) {
+background-color: rgba(50, 49, 46, 0.85);
+}
+tr:hover {
+background-color: rgba(255, 255, 255, 1);
+}
+
+/* Style the title of the recent games table */
+#recent-stats h3 {
+    color: goldenrod;
+    font-weight: bolder;
+    font-size: 1.75em;
+    margin-bottom: 0.5%;
+    text-align: center;
+}
+
+@media screen and (max-width: 992px) {
+    /* Style the aside element text */
+    aside {
+        text-align: center;
     }
 
-    
-/* Add a background image to the page */
-    body {
-        background-image: url('https://library.sportingnews.com/styles/twitter_card_120x120/s3/2022-01/fvv_s4vuakyp6aruzw63pq5t59ie.png?itok=DZxVKvBs');
+    /* Style the aside element buttons */
+    .custom-button{
+        width: 30%;
+    }
+    #historyBtnGroup {
+        text-align: center;
+    }
+
+    /* Style the title of the cards */
+    #player-stats h3 {
+        font-size: 1.3em;
+        margin-bottom: 1%;
+        text-align: center;
+    }
+
+    /* Style the player cards */
+    .card {
+        margin: 0%;
+        display: inline-block;
+    }
+    .dropdown{
+        display: inline-block;
+        width: 100%;
+    }
+    .card h5 {
+        font-size: 1.15em;
+        float: none;
+    }
+    .card p {
+        font-size: 1em;
+        margin: 0 10%;
+    }
+}
+
+@media screen and (max-width: 786px) {
+    .card p {
+        margin: 0 5%;
+        font-size: 0.85em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    body{
+        background-image: url('https://i.pinimg.com/736x/d9/53/f0/d953f00e555f7d5a628603e9bbe35f71--basketball-court-friendship.jpg;');
         background-size: cover;
-        background-repeat: no-repeat;
-      }
+        background-repeat: repeat;
+    }
+ 
+}
