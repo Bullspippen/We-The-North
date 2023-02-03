@@ -4,7 +4,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     max-height: 100vh;
-    overflow: hidden;
+    overflow: scroll;
   }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
@@ -27,12 +27,35 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 5px;
     margin-bottom: 1%;
 }
+/* Add spacing to the player stats container */
+#player-stats {
+    margin-top: 10%;
+}
+#player-stats h3 {
+    color: goldenrod;
+    font-weight: bolder;
+    font-size: 1.5em;
+    margin-bottom: 5%;
+    text-align: center;
+}
 /* Style the player cards */
 .card {
     background-color: rgba(60, 59, 56, 0);
-    color: rgba(60, 59, 56, 0.919);
     border: 0 ;
     padding: 0.5%;
+}
+.card h5 {
+    font-weight: bold;
+    color: rgba(60, 59, 56, 0.919);
+}
+.card p {
+    display: flex;
+    font-size: .85em;
+    color: goldenrod;
+}
+.card p img {
+    margin-right: 10px;
+    width: 35%;
 }
 
 
@@ -44,7 +67,9 @@ table {
     }
 th{
     background-color: white;
+    color:  rgba(60, 59, 56, 0.919);
     font-weight: bolder;
+    font-size: 1.3em;
 }
 th, td {
 border: 2px solid rgba(60, 59, 56, 0.919);
@@ -52,7 +77,7 @@ text-align: center;
 padding: 8px;
 }
 td {
-    font-size: 0.85em;
+    font-size: 1em;
 }
 tr:nth-child(even) {
 background-color: rgba(221, 221, 221, 0.9);
@@ -68,7 +93,48 @@ background-color: rgba(255, 255, 255, 1);
 #recent-stats h3 {
     color: goldenrod;
     font-weight: bolder;
-    font-size: 1.5em;
+    font-size: 1.75em;
     margin-bottom: 0.5%;
     text-align: center;
+}
+
+
+@media screen and (max-width: 992px) {
+    /* Style the aside element text */
+    aside {
+        text-align: center;
+    }
+
+    /* Style the title of the cards */
+    #player-stats{
+        margin-top: 10%;
+    }
+    #player-stats h3 {
+        font-size: 1.3em;
+        margin-bottom: 1%;
+        text-align: center;
+    }
+
+    /* Style the player cards */
+    .card {
+        margin: 0%;
+        display: inline-block;
+    }
+    .dropdown{
+        display: inline-block;
+    }
+    .card h5 {
+        font-size: 1.15em;
+    }
+    .card p {
+        font-size: 1em;
+        margin: 0 10%;
+    }
+}
+
+@media screen and (max-width: 786px) {
+    .card p {
+        margin: 0 5%;
+        font-size: 0.85em;
+    }
 }
