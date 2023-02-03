@@ -60,6 +60,13 @@ h1, h2, h3, h4, h5, h6 {
     width: 35%;
 }
 
+.card img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border: 1px solid black;
+    }
+    
 #historyBtnGroup {
     color: goldenrod;
     margin: 5% 0 3% 0;
