@@ -300,10 +300,14 @@ selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text; // Toronto Raptors 
 
-    console.log(teamHistoryArray);
+    // Team Viewing History builder for array
     teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
-    teamHistoryArray.pop(); // Pop will keep the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
+    teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
     console.log(teamHistoryArray);
+    
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
@@ -317,8 +321,7 @@ selectedTeam.click(function(event) {
 
 // Event listeners for Group of Buttons for Team History
 teamHist0BtnElement.click(function(event){
-    // Get the team name from the ment. Format is correct for balldontlie API.
-    let teamName = teamHistoryArray[0]; // New York Knicks Placeholder Test
+    let teamName = teamHistoryArray[0]; // Retrieves the first team saved in the array
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
@@ -331,9 +334,7 @@ teamHist0BtnElement.click(function(event){
 })
 
 teamHist1BtnElement.click(function(event){
-    // Get the team name from the selected element. Format is correct for balldontlie API.
-    let teamName = "Los Angeles Lakers"; // LA Lakers Placeholder Test
-    // teamHistoryArray.push(teamName);
+    let teamName = teamHistoryArray[1]; // Retrieves the second team saved in the array
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
@@ -346,9 +347,7 @@ teamHist1BtnElement.click(function(event){
 })
 
 teamHist2BtnElement.click(function(event){
-    // Get the team name from the selected element. Format is correct for balldontlie API.
-    let teamName = "New York Knicks"; // NY Knicks Placeholder Test 
-    // teamHistoryArray.push(teamName);
+    let teamName = teamHistoryArray[2]; // Retrieves the third team saved in the array
 
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
