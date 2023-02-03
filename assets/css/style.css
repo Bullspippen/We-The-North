@@ -29,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Add spacing to the player stats container */
 #player-stats {
-    margin-top: 10%;
+    margin-top: 5%;
 }
 #player-stats h3 {
     color: goldenrod;
