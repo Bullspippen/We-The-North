@@ -15,16 +15,16 @@ var players = {
     "Luka Doncic": 132,
     "Nikola Jokic": 246,
     "Joel Embiid": 145,
-    "Giannis Antetokounmpo": 15,
-    "LeBron James": 237,
+    // "Giannis Antetokounmpo": 15,
+    // "LeBron James": 237,
 }
 
 var images = {
     "Luka Doncic": "https://www.basketball-reference.com/req/202106291/images/players/doncilu01.jpg",
     "Nikola Jokic": "https://www.basketball-reference.com/req/202106291/images/players/jokicni01.jpg",
     "Joel Embiid": "https://www.basketball-reference.com/req/202106291/images/players/embiijo01.jpg",
-    "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
-    "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
+    // "Giannis Antetokounmpo": "https://www.basketball-reference.com/req/202106291/images/players/antetgi01.jpg",
+    // "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
 };
 
 // Gets a team ID from the balldontlie teams endpoint
@@ -71,12 +71,13 @@ function getPlayerStats() {
               })
               .then(function(data) {
                 let playerStats = data['data'];
-                let cardContainer = $('<div>').addClass("card col-sm-3");
+                let playerStatsTitle = $('<h3>').text("Top 3 Season Leaders");
+                let cardContainer = $('<div>').addClass("card col-lg-12 col-md-4 col-sm-4 col-xs-4");
                 let cardHeader = $('<h5>').text(indexPlayers[i]);
-                let cardBody = $('<p>').text("Points: " + playerStats[0].pts + "\nRebounds: " + playerStats[0].reb + "\nAssists: " + playerStats[0].ast);
+                let cardBody = $('<p>').text("Points:\n " + playerStats[0].pts + "\nRebounds: \n" + playerStats[0].reb + "\nAssists: \n" + playerStats[0].ast);
                 let image = $("<img>").attr("src", images[indeximages[i]])
                   
-                // Append the cards to the container
+                // Append the card container to the player stats element
                 playerStatsElement.append(cardContainer);
 
                 // Append the card elements to the card
@@ -85,8 +86,11 @@ function getPlayerStats() {
                 // Append the images into the paragraph
                 cardBody.append(image);
               });
-        })(i); 
-    } 
+        })(i);
+    }
+    // Append the title of the card containers to the player stats element
+    let playerStatsTitle = $('<h3>').text("Top 3 Season Leaders");
+    playerStatsElement.append(playerStatsTitle); 
 }
 
 // Function to get the recent game stats and display them in a table.
@@ -130,7 +134,7 @@ function getGameStats(teamID, teamName) {
             recentGamesElement.empty();
 
             // Create and append a header to the table
-            let tableHeader = $('<h3>').text( teamName + " last 10 games");
+            let tableHeader = $('<h3>').text( teamName + " Last 10 Games");
             recentGamesElement.append(tableHeader);
 
 
