@@ -29,6 +29,7 @@ var images = {
     // "LeBron James": "https://www.basketball-reference.com/req/202106291/images/players/jamesle01.jpg"
 };
 
+
 // Gets a team ID from the balldontlie teams endpoint
 // The team ID is used to get a list of games with the team ID from the games endpoint.
 function getTeamID(teamName) {
@@ -284,6 +285,14 @@ function getUpcomingGames(teamName) {
 }
 
 // Initialize the page and load the Toronto Raptors data AND retrieve local storage data from the client-side storage
+function retrieveLocalSavedTeams() {
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+}
+retrieveLocalSavedTeams();
+
 function init() {
     // Retrieve the local storage data from the client-side storage
     retrieveLocalSavedTeams();
