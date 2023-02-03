@@ -284,18 +284,6 @@ function getUpcomingGames(teamName) {
         })
 }
 
-<<<<<<< HEAD
-=======
-// Initialize the page and load the Toronto Raptors data AND retrieve local storage data from the client-side storage
-function retrieveLocalSavedTeams() {
-    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
-    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
-    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
-    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
-}
-retrieveLocalSavedTeams();
-
->>>>>>> main
 function init() {
     // Retrieve the local storage data from the client-side storage
     retrieveLocalSavedTeams();
