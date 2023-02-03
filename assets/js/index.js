@@ -6,6 +6,10 @@ let recentGamesElement = $("#recent-stats");
 let selectButton = $("#dropdownMenuButton1");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
+let teamHist0BtnElement = $("#prevTeam0");
+let teamHist1BtnElement = $("#prevTeam1");
+let teamHist2BtnElement = $("#prevTeam2");
+var teamHistoryArray = ["Toronto Raptors", "Los Angeles Lakers", "New York Knicks"];
 
 var players = {
     "Luka Doncic": 132,
@@ -292,12 +296,62 @@ selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text; // Toronto Raptors 
 
+    console.log(teamHistoryArray);
+    teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
+    teamHistoryArray.pop(); // Pop will keep the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
+    console.log(teamHistoryArray);
+
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
 
     // Convert the team name to the SeatGeek query sting format
     let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // toronto-raptors
 
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+// Event listeners for Group of Buttons for Team History
+teamHist0BtnElement.click(function(event){
+    // Get the team name from the ment. Format is correct for balldontlie API.
+    let teamName = teamHistoryArray[0]; // New York Knicks Placeholder Test
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist1BtnElement.click(function(event){
+    // Get the team name from the selected element. Format is correct for balldontlie API.
+    let teamName = "Los Angeles Lakers"; // LA Lakers Placeholder Test
+    // teamHistoryArray.push(teamName);
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist2BtnElement.click(function(event){
+    // Get the team name from the selected element. Format is correct for balldontlie API.
+    let teamName = "New York Knicks"; // NY Knicks Placeholder Test 
+    // teamHistoryArray.push(teamName);
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);
 })
