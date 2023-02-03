@@ -29,6 +29,12 @@ h6 {
     justify-content: center;
 }
 
+.card img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border: 1px solid black;
+}
 
 /* Style the table */
 table {
