@@ -87,6 +87,10 @@ function getPlayerStats() {
 
                 // Append the images into the paragraph
                 cardBody.append(image);
+
+                if (i == 0) {
+                    cardContainer.id("last-container");
+                }
               });
         })(i);
     }

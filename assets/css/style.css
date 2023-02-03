@@ -17,7 +17,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bolder;
     border: 2px solid rgba(60, 59, 56, 1);
     border-radius: 5px;
-    margin-bottom: 1%;
+    width: 100%;
 }
 .custom-button:hover{
     background-color: rgba(60, 59, 56, 0.1);
@@ -46,6 +46,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .card h5 {
     font-weight: bold;
+    display: inline-block;
+    float: left;
     color: rgba(60, 59, 56, 0.919);
 }
 .card p {
@@ -59,18 +61,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #historyBtnGroup {
-    display: block;
-    justify-content: space-around;
     color: goldenrod;
+    margin: 5% 0 3% 0;
+    text-align: center;
 }
-
-historyBtnGroup button {
-    width: 100%;
-    margin: 5px;
+#historyBtnGroup button {
+    margin-bottom: 1%;
 }
-
-#recent-stats img {
-    width: 1px;
+#last-container{
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 /* Style the tables */
@@ -136,6 +136,7 @@ background-color: rgba(255, 255, 255, 1);
     }
     .dropdown{
         display: inline-block;
+        width: 100%;
     }
     .card h5 {
         font-size: 1.15em;
