@@ -87,10 +87,6 @@ function getPlayerStats() {
 
                 // Append the images into the paragraph
                 cardBody.append(image);
-
-                if (i == 0) {
-                    cardContainer.id("last-container");
-                }
               });
         })(i);
     }
@@ -287,6 +283,9 @@ function getUpcomingGames(teamName) {
         })
 }
 
+<<<<<<< HEAD
+// Initialize the page and load the Toronto Raptors data AND retrieve local storage data from the client-side storage
+=======
 function retrieveLocalSavedTeams() {
     teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
     document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
@@ -295,7 +294,11 @@ function retrieveLocalSavedTeams() {
 }
 retrieveLocalSavedTeams();
 
+>>>>>>> main
 function init() {
+    // Retrieve the local storage data from the client-side storage
+    retrieveLocalSavedTeams();
+
     // Display the raptors as the default team
     getPlayerStats();
 
@@ -310,6 +313,18 @@ function init() {
 }
 init();
 
+// Retrieve the local storage data from the client-side storage
+function retrieveLocalSavedTeams() {
+
+    // Retrieve the local storage data from the client-side storage
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+}
+
+
 selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text; // Toronto Raptors 
@@ -317,7 +332,13 @@ selectedTeam.click(function(event) {
     // Team Viewing History builder for array
     teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
     teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
+<<<<<<< HEAD
+    console.log(teamHistoryArray);
+
+    //Save the team history array to local storage
+=======
     
+>>>>>>> main
     localStorage.setItem("localSavedTeams", JSON.stringify(teamHistoryArray));
     
     document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
