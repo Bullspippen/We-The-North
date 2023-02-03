@@ -112,17 +112,21 @@ background-color: rgba(255, 255, 255, 1);
     text-align: center;
 }
 
-
 @media screen and (max-width: 992px) {
     /* Style the aside element text */
     aside {
         text-align: center;
     }
 
-    /* Style the title of the cards */
-    #player-stats{
-        margin-top: 10%;
+    /* Style the aside element buttons */
+    .custom-button{
+        width: 30%;
     }
+    #historyBtnGroup {
+        text-align: center;
+    }
+
+    /* Style the title of the cards */
     #player-stats h3 {
         font-size: 1.3em;
         margin-bottom: 1%;
@@ -140,6 +144,7 @@ background-color: rgba(255, 255, 255, 1);
     }
     .card h5 {
         font-size: 1.15em;
+        float: none;
     }
     .card p {
         font-size: 1em;
@@ -152,4 +157,13 @@ background-color: rgba(255, 255, 255, 1);
         margin: 0 5%;
         font-size: 0.85em;
     }
+}
+
+@media screen and (max-width: 576px) {
+    body{
+        background-image: url('https://i.pinimg.com/736x/d9/53/f0/d953f00e555f7d5a628603e9bbe35f71--basketball-court-friendship.jpg;');
+        background-size: cover;
+        background-repeat: repeat;
+    }
+ 
 }
