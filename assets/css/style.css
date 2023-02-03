@@ -86,21 +86,21 @@ th{
     font-size: 1.3em;
 }
 th, td {
-border: 2px solid rgba(60, 59, 56, 0.919);
-text-align: center;
-padding: 8px;
+    border: 2px solid rgba(60, 59, 56, 0.919);
+    text-align: center;
+    padding: 8px;
 }
 td {
     font-size: 1em;
 }
 tr:nth-child(even) {
-background-color: rgba(221, 221, 221, 0.9);
+    background-color: rgba(221, 221, 221, 0.9);
 }
 tr:nth-child(odd) {
-background-color: rgba(50, 49, 46, 0.85);
+    background-color: rgba(50, 49, 46, 0.85);
 }
 tr:hover {
-background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 /* Style the title of the recent games table */
@@ -120,7 +120,7 @@ background-color: rgba(255, 255, 255, 1);
 
     /* Style the aside element buttons */
     .custom-button{
-        width: 30%;
+        width: 35%;
     }
     #historyBtnGroup {
         text-align: center;
@@ -150,6 +150,20 @@ background-color: rgba(255, 255, 255, 1);
         font-size: 1em;
         margin: 0 10%;
     }
+
+    /* Style the tables */
+    #recent-stats {
+        font-size: 1.3em;
+    }
+    table {
+        margin: 0 2%;
+    }
+    th {
+        font-size: 0.9em;
+    }
+    td {
+        font-size: 0.75em;
+    }
 }
 
 @media screen and (max-width: 786px) {
@@ -159,11 +173,36 @@ background-color: rgba(255, 255, 255, 1);
     }
 }
 
-@media screen and (max-width: 576px) {
-    body{
-        background-image: url('https://i.pinimg.com/736x/d9/53/f0/d953f00e555f7d5a628603e9bbe35f71--basketball-court-friendship.jpg;');
-        background-size: cover;
-        background-repeat: repeat;
+@media screen and (max-width: 576px) { 
+    /* Style the title of the cards */
+    #player-stats h3 {
+        font-size: 1em;
     }
- 
+
+    /* Style the aside element buttons */
+    .custom-button{
+        font-size: 0.75em;
+        width: 35%;
+    }
+    .card {
+        width: 75%;
+    }
+    .card p {
+        margin: 0 2%;
+        font-size: 0.75em;
+    }
+
+    /* Style the tables */
+    #recent-stats h3 {
+        font-size: 1em;
+    }
+    table{
+        margin: 1% 0%;
+    };
+    th {
+        font-size: 0.7em;
+    }
+    td {
+        font-size: 0.55em;
+    }
 }
