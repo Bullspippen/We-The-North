@@ -6,10 +6,12 @@ let recentGamesElement = $("#recent-stats");
 let selectButton = $("#dropdownMenuButton1");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
+
 let teamHist0BtnElement = $("#prevTeam0");
 let teamHist1BtnElement = $("#prevTeam1");
 let teamHist2BtnElement = $("#prevTeam2");
 var teamHistoryArray = ["Toronto Raptors", "Los Angeles Lakers", "New York Knicks"];
+    
 
 var players = {
     "Luka Doncic": 132,
@@ -281,6 +283,16 @@ function getUpcomingGames(teamName) {
         })
 }
 
+function retrieveLocalSavedTeams() {
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+    console.log(teamHistoryArray);
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+    console.log(teamHistoryArray);
+}
+retrieveLocalSavedTeams();
+
 function init() {
     // Display the raptors as the default team
     getPlayerStats();
@@ -303,7 +315,8 @@ selectedTeam.click(function(event) {
     // Team Viewing History builder for array
     teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
     teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
-    console.log(teamHistoryArray);
+    
+    localStorage.setItem("localSavedTeams", JSON.stringify(teamHistoryArray));
     
     document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
     document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
