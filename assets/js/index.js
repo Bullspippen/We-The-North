@@ -6,6 +6,10 @@ let recentGamesElement = $("#recent-stats");
 let selectButton = $("#dropdownMenuButton1");
 const clientID = "MzE3MTIzMTB8MTY3NTE4OTk3My4zMjk3Nw";
 const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540c556a433b";
+let teamHist0BtnElement = $("#prevTeam0");
+let teamHist1BtnElement = $("#prevTeam1");
+let teamHist2BtnElement = $("#prevTeam2");
+var teamHistoryArray = ["Toronto Raptors", "Los Angeles Lakers", "New York Knicks"];
 
 var players = {
     "Luka Doncic": 132,
@@ -296,6 +300,15 @@ selectedTeam.click(function(event) {
     // Get the team name from the selected element. Format is correct for balldontlie API.
     let teamName = event.target.text; // Toronto Raptors 
 
+    // Team Viewing History builder for array
+    teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
+    teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
+    console.log(teamHistoryArray);
+    
+    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
+    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
+    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
+
     //Call the getTeamID function for the selected team to start the API calls for the season stats
     getTeamID(teamName);
 
@@ -305,3 +318,56 @@ selectedTeam.click(function(event) {
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);
 })
+
+// Event listeners for Group of Buttons for Team History
+teamHist0BtnElement.click(function(event){
+    let teamName = teamHistoryArray[0]; // Retrieves the first team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist1BtnElement.click(function(event){
+    let teamName = teamHistoryArray[1]; // Retrieves the second team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+teamHist2BtnElement.click(function(event){
+    let teamName = teamHistoryArray[2]; // Retrieves the third team saved in the array
+
+    //Call the getTeamID function for the selected team to start the API calls for the season stats
+    getTeamID(teamName);
+    
+    // Convert the team name to the SeatGeek query sting format
+    let teamSGFormat = teamName.toLowerCase().replaceAll(" ", "-"); // e.g. toronto-raptors
+    
+    // Call the getUpcomingGames function for the selected team
+    getUpcomingGames(teamSGFormat);
+})
+
+// Working pieces for Local Save of previously selected teams
+// viewHistoryBtnEl.addEventListener("click", function () {
+//     let saveTeam = teamPlaceholderElement.value
+//     let teamHistoryLocalSave = { teamname: saveTeam };
+
+//     // Retrieves the locally stored array of scores and names. Uses JSON parsing to convert text format into a JS array. || Means if there's nothing stored, then [] will make it blank
+//     teamHistory = JSON.parse(localStorage.getItem("teamname")) || [];
+    
+//     // Adds current score to the highScores array
+//     teamHistArray.push(teamHistoryLocal);
+//     localStorage.setItem("teamname", JSON.stringify(teamHistArray));
+// });
