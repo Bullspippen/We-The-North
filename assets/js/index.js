@@ -288,12 +288,10 @@ function getUpcomingGames(teamName) {
 }
 
 function retrieveLocalSavedTeams() {
+    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
     document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
     document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
     document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
-    console.log(teamHistoryArray);
-    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
-    console.log(teamHistoryArray);
 }
 retrieveLocalSavedTeams();
 
@@ -375,16 +373,3 @@ teamHist2BtnElement.click(function(event){
     // Call the getUpcomingGames function for the selected team
     getUpcomingGames(teamSGFormat);
 })
-
-// Working pieces for Local Save of previously selected teams
-// viewHistoryBtnEl.addEventListener("click", function () {
-//     let saveTeam = teamPlaceholderElement.value
-//     let teamHistoryLocalSave = { teamname: saveTeam };
-
-//     // Retrieves the locally stored array of scores and names. Uses JSON parsing to convert text format into a JS array. || Means if there's nothing stored, then [] will make it blank
-//     teamHistory = JSON.parse(localStorage.getItem("teamname")) || [];
-    
-//     // Adds current score to the highScores array
-//     teamHistArray.push(teamHistoryLocal);
-//     localStorage.setItem("teamname", JSON.stringify(teamHistArray));
-// });
