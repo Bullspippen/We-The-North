@@ -10,7 +10,7 @@ const clientAppSecret = "dd20d1dc80a7a92527e18689f8e60bce450670b200b5f20c21ab540
 let teamHist0BtnElement = $("#prevTeam0");
 let teamHist1BtnElement = $("#prevTeam1");
 let teamHist2BtnElement = $("#prevTeam2");
-var teamHistoryArray = ["Toronto Raptors", "Los Angeles Lakers", "New York Knicks"];
+var teamHistoryArray = ["Denver Nuggets", "Los Angeles Lakers", "New York Knicks"];
     
 
 var players = {
@@ -283,14 +283,6 @@ function getUpcomingGames(teamName) {
         })
 }
 
-function retrieveLocalSavedTeams() {
-    teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
-    document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
-    document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
-    document.querySelector('#prevTeam2').textContent = teamHistoryArray[2];
-}
-retrieveLocalSavedTeams();
-
 function init() {
     // Retrieve the local storage data from the client-side storage
     retrieveLocalSavedTeams();
@@ -314,6 +306,10 @@ function retrieveLocalSavedTeams() {
 
     // Retrieve the local storage data from the client-side storage
     teamHistoryArray = JSON.parse(localStorage.getItem("localSavedTeams"));
+
+    if (teamHistoryArray === null) {
+        teamHistoryArray = ["Denver Nuggets", "Los Angeles Lakers", "New York Knicks"];
+    }
 
     document.querySelector('#prevTeam0').textContent = teamHistoryArray[0];
     document.querySelector('#prevTeam1').textContent = teamHistoryArray[1];
