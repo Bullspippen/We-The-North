@@ -324,7 +324,6 @@ selectedTeam.click(function(event) {
     // Team Viewing History builder for array
     teamHistoryArray.unshift(teamName); // Unshift to add 'event' team name from the li of the dropdown menu. Saves name to beginning of array.
     teamHistoryArray.pop(); // Pop will stop the array from infinitely building. Add (unshift) +1 at [0], remove -1 at end [2]
-    console.log(teamHistoryArray);
 
     //Save the team history array to local storage
     localStorage.setItem("localSavedTeams", JSON.stringify(teamHistoryArray));
